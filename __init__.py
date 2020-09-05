@@ -1,7 +1,6 @@
 from flask import Flask, redirect, jsonify
 
-import csv
-import json
+import csv, json
 
 app = Flask(__name__)
 
@@ -17,20 +16,18 @@ Implement an endpoint `/api/fetch` that returns the contents of `data.csv` as JS
 
 """
 
+
 @app.route("/api/fetch")
 def fetch():
-    with open('data.csv', mode='r') as csv_file:
-        jsonfile = open('test.json', 'w')
-        csvfile = open('data.csv', 'r')
-
+    with open('data.csv', mode='r') as csvfile:
         data = {}
-        with csvfile:
-            csvReader = csv.DictReader(csvfile)
-            for rows in csvReader:
-                id = rows['id']
-                data[id] = {'name': f'{rows["first_name"]} {rows["last_name"]}', 'time_zone': f'{rows["time_zone"]}',
-                            'dept': f'{rows["dept"]}'}
-        return jsonify(data)
+        csvreader = csv.DictReader(csvfile)
+        for rows in csvreader:
+            id = rows['id']
+            data[id] = {'name': f'{rows["first_name"]} {rows["last_name"]}', 'time_zone': f'{rows["time_zone"]}',
+                        'dept': f'{rows["dept"]}'}
+    return jsonify(data)
+
 
 """
 
@@ -42,6 +39,7 @@ DOCUMENTATION WEBPAGE BELOW
 @app.route("/")
 def redirect_to_api():
     return redirect("/api", code=301)
+
 
 @app.route("/api")
 def api_home():
